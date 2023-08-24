@@ -4,7 +4,7 @@ pipeline {
         stage ('vcs') {
             steps {
                 git url: 'https://github.com/konetipaddu/game-of-life.git',
-                branch: 'main'
+                branch: 'master'
             }
         }
         stage ('package') {
