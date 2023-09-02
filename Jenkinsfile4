@@ -1,0 +1,33 @@
+pipeline {
+    agent { label 'MAVEN_JDK_8'}
+    triggers { pollSCM ('H/30 * * * *')}
+    parameters {
+        string(name: 'MAVEN_GOAL', defaultValue: 'package', description: 'MAVEN_GOAL')
+    }
+    stages {
+        stage ('vcs') {
+            steps {
+                git url: 'https://github.com/konetipaddu/game-of-life.git',
+                branch: 'master'
+            }
+        }
+        stage ('package') {
+            tools {
+                jdk 'JDK_UBUNTU_8'
+            }
+            
+            steps {
+                sh "mvn ${params.MAVEN_GOAL}"
+            }
+        }
+        
+        stage ('post build') {
+            steps {
+                archiveArtifacts artifacts: '**/target/gameoflife.war',
+                                 allowEmptyArchive: true
+                junit testResults: '**/surefire-reports/TEST-*.xml'
+            }
+        }
+    }
+}
+    
