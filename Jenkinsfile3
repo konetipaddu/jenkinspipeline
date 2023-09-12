@@ -9,8 +9,8 @@ pipeline {
         }
         stage('sonar'){
             steps{
-                withSonarQubeEnv('sonar-qube') {
-                    sh 'mvn clean package sonar:sonar -Dsonar.projectKey=padma_spring -Dsonar.organization=padma_spring'
+                withSonarQubeEnv('SONAR_HOST') {
+                    sh 'mvn clean package sonar:sonar -Dsonar.projectKey=padma_spring -Dsonar.organization=spring -Dsonar.host.url=https://sonarcloud.io'
                 }
             }
         }
