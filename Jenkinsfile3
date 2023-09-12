@@ -1,3 +1,18 @@
 pipeline {
-    agent ( label '')
+    agent {label 'node'}
+    stages {
+        stage('vcs'){
+            steps{
+                git url: 'https://github.com/konetipaddu/spring-petclinic.git'.
+                branch: 'main'
+            }
+        }
+        stage('sonar'){
+            steps{
+                withSonarQubeEnv('sonar-qube') {
+                    sh 'mvn clean package sonar:sonar -Dsonar.projectKey=padma_spring -Dsonar.token=da8459374dedbe8d1f1e975665a5dc5b3cf49926 -Dsonar.organization=padma_spring'
+                }
+            }
+        }
+    }
 }
