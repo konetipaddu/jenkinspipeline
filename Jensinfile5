@@ -1,0 +1,45 @@
+pipeline {
+    agent { label 'JDK-17' }
+    options {
+        timeout(time: 30, unit: 'MINUTES')
+    }
+    triggers {
+        pollSCM('* * * * *')
+    }
+    tools {
+        jdk 'JDK_17'
+    }
+    stages {
+        stage('vcs') {
+            steps {
+                git url: 'https://github.com/konetipaddu/spring-petclinic.git',
+                    branch: 'main'
+            }
+        }
+        stage('build and package') {
+            steps {
+                 rtMavenDeployer (
+                    id: "JFROG_CLOUD",
+                    serverId: "JFROG_CLOUD",
+                    releaseRepo: 'libs-release-local',
+                    snapshotRepo: 'libs-release-local'
+                )
+                rtMavenRun (
+                    tool: 'MAVEN_3.9.4', 
+                    pom: 'pom.xml',
+                    goals: 'mvn install',
+                    deployerId: "SPC_DEPLOYER"
+                )
+                rtPublishBuildInfo (
+                    serverId: "JFROG_CLOUD"
+                )
+            }
+        }
+        stage('reporting') {
+            steps {
+                junit testResults: '**/target/surefire-reports/TEST-*.xml'
+            }
+        }
+    }
+
+}
