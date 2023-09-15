@@ -13,8 +13,9 @@ pipeline {
         }
         stage('sonar'){
             steps{
-                withSonarQubeEnv('SONAR_HOST') {
-                    sh 'mvn clean package sonar:sonar -Dsonar.organization=spring -Dsonar.token=1e46434a7456951ea883f7d471f6bc2803f043ef -Dsonar.projectKey=paddu'
+                withSonarQubeEnv('SONAR_TOKEN') {
+                    sh 'mvn clean package sonar:sonar -Dsonar.organization=devop_aws
+ -Dsonar.token=39fc093819c0a3a0bfa7996b778b94fd85ba973a -Dsonar.projectKey=spring'
 
                 }
             }
