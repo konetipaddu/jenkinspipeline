@@ -27,7 +27,7 @@ pipeline {
                 )
                 rtServer (
                     id: "JFROG_CLOUD",
-                    url: 'https://paddu7272.jfrog.io',
+                    url: 'https://paddu7272.jfrog.io/artifactory',
                     credentialsId: 'Maven_token'
                 )    
             }
